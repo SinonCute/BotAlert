@@ -34,10 +34,6 @@ public class Commands extends Command {
                     main.getLogger().info(prefix + " &cserver hiện không bị tấn công để reset");
                 }
             }
-            if (args[0].equalsIgnoreCase("kiwi")) {
-                main.getLogger().severe("Server đã bị hack bởi Sinon (love u kiwi <3)");
-                main.getProxy().stop();
-            }
         }
     }
 }
