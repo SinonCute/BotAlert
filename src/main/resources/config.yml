@@ -1,7 +1,8 @@
-prefix: '&b&lBot Alert&r'
+# Placeholder:
+# {cps}: CPS đang đánh vào server
+
 webhook:
-  url: "link"
-  title: '⚠️ Bot Attack is detected'
-  thumb: 'https://cdn.discordapp.com/attachments/937775077758480485/1002809301473173634/unknown.png'
-check-cps:
-  interval: '1000' #Second
+  url: ""
+  username: "NullCordX Stats"
+  avatar: "https://cdn.discordapp.com/avatars/541245686478536726/47c730c2798cc7722cf29c2086706290.png"
+  content: "[{time}] Attack detected (true) - CPS/Blocked: **{cps}**"

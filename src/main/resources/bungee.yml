@@ -1,4 +1,4 @@
 name: BotAlert
 version: '${project.version}'
-main: sinon.botcheckattack.BotCheckAttack
+main: sinon.botcheckattack.BotAlert
 author: Sinon

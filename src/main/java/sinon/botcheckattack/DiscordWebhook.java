@@ -1,4 +1,4 @@
-package sinon.botcheckattack.discord;
+package sinon.botcheckattack;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;
