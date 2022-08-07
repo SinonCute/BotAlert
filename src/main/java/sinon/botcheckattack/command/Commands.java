@@ -26,14 +26,6 @@ public class Commands extends Command {
             if (args[0].equalsIgnoreCase("debug")) {
                 main.sendWebhook(main.getConfig().getString("webhook.url"), 1, 1);
             }
-            if (args[0].equalsIgnoreCase("reset")) {
-                if (main.isUnderAttack && main.task.isCancel()) {
-                    main.setIsUnderAttack(false);
-                    main.task = new CheckCps();
-                } else {
-                    main.getLogger().info(prefix + " &cserver hiện không bị tấn công để reset");
-                }
-            }
         }
     }
 }

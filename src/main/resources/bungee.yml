@@ -2,7 +2,3 @@ name: BotAlert
 version: '${project.version}'
 main: sinon.botcheckattack.BotCheckAttack
 author: Sinon
-description: 'ditme kiwi'
-commands:
-  debug:
-  reload:

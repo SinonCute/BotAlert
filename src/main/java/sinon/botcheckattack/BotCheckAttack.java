@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 
 public final class BotCheckAttack extends Plugin {
@@ -28,8 +27,6 @@ public final class BotCheckAttack extends Plugin {
     public static BotCheckAttack getInstance() {
         return instance;
     }
-
-    public boolean isUnderAttack = false;
 
     private String prefix;
 
@@ -43,11 +40,6 @@ public final class BotCheckAttack extends Plugin {
         getLogger().info(color(prefix + " &bPlugin đã khởi động"));
         getProxy().getPluginManager().registerCommand(this, new Commands("bot", "bot.admin"));
         task = new CheckCps();
-        getProxy().getScheduler().schedule(this, () -> {
-            if (isUnderAttack && task.isCancel()){
-                new CheckCps();
-            }
-        }, 1, config.getInt("stop-when-under-attack"), TimeUnit.MINUTES);
     }
 
     @Override
@@ -55,9 +47,6 @@ public final class BotCheckAttack extends Plugin {
         getLogger().info(color(prefix + " &bPlugin đã tắt"));
     }
 
-    public boolean setIsUnderAttack(boolean result) {
-        return isUnderAttack = result;
-    }
 
     public Configuration getConfig() {
         return config;
@@ -97,7 +86,6 @@ public final class BotCheckAttack extends Plugin {
         DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject();
 
         embed.setColor(Color.yellow);
-
         embed.setTitle(config.getString("webhook.title", "⚠️ Bot Attack is detected"));
         embed.addField("Time", calendar.getTime().toString(), false);
         embed.addField("CPS", cps + "", false);

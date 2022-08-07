@@ -4,6 +4,4 @@ webhook:
   title: '⚠️ Bot Attack is detected'
   thumb: 'https://cdn.discordapp.com/attachments/937775077758480485/1002809301473173634/unknown.png'
 check-cps:
-  interval: '50'
-  mark-cps: '1000'
-stop-when-under-attack: '30'
+  interval: '1000' #Second

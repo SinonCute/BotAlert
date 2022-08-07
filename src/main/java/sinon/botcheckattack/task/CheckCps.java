@@ -20,22 +20,19 @@ public class CheckCps implements Runnable{
 
 
     public CheckCps() {
-        this.task = main.getProxy().getScheduler().schedule(main, this,1, config.getInt("check-cps.interval", 30), TimeUnit.SECONDS);
+        this.task = main.getProxy().getScheduler().schedule(main, this, config.getInt("check-cps.interval"), 1, TimeUnit.SECONDS);
     }
     private boolean isCanceled;
 
     @Override
     public void run() {
-        int CurrentCPS = statisticsManager.getConnectionsPerSecond();
-        if (CurrentCPS >= config.getInt("check-cps.mark-cps", 1000)){
-            int bots = nullCordX.getBotCounter();
-            main.sendWebhook(config.getString("webhook.url", ""), CurrentCPS, bots);
-            main.setIsUnderAttack(true);
-            cancel();
-        } else {
-            main.setIsUnderAttack(false);
+        if (nullCordX.isUnderAttack()){
+            if (!nullCordX.isForceProtectionEnabled()) {
+                int CurrentCPS = statisticsManager.getConnectionsPerSecond();
+                int bots = nullCordX.getBotCounter();
+                main.sendWebhook(config.getString("webhook.url", ""), CurrentCPS, bots);
+            }
         }
-
     }
 
     public void cancel() {
