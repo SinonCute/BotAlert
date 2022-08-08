@@ -2,6 +2,8 @@
 # {time}: Thời gian hiện tại
 # {status}: Trạng thái, true nếu đang bị attack, false nếu đang bình thường
 # {cps}: CPS đang đánh vào server
+# {maxMem}/{totalMem}/{freeMem}/{usedMem}: Các thông tin về memory của runtime
+# {processCPULoad}/{systemCPULoad}: Các thông tin về cpu load của runtime và system
 # Thời gian giữa các lần check tính bằng giây, đặt tối đa 15 giây để tránh bị rate limit từ Discord
 #
 # Made with love by Sinon
