@@ -91,10 +91,10 @@ public final class BotAlert extends Plugin {
         DecimalFormat formatter = new DecimalFormat("#0.00");
 
         // Resources stats
-        long maxMem = Runtime.getRuntime().maxMemory() / 1024L / 1024L;
+        // long maxMem = Runtime.getRuntime().maxMemory() / 1024L / 1024L;
         long totalMem = Runtime.getRuntime().totalMemory() / 1024L / 1024L;
         long freeMem = Runtime.getRuntime().freeMemory() / 1024L / 1024L;
-        long usedMem = maxMem - freeMem;
+        long usedMem = totalMem - freeMem;
 
         OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(
                 OperatingSystemMXBean.class);
@@ -105,7 +105,7 @@ public final class BotAlert extends Plugin {
                 .replace("{time}", dtf.format(now))
                 .replace("{status}", nullCordX.isUnderAttack() ? "true" : "false")
                 .replace("{cps}", String.valueOf(cps))
-                .replace("{maxMem}", String.valueOf(maxMem))
+                // .replace("{maxMem}", String.valueOf(maxMem))
                 .replace("{totalMem}", String.valueOf(totalMem))
                 .replace("{freeMem}", String.valueOf(freeMem))
                 .replace("{usedMem}", String.valueOf(usedMem))
