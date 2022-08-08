@@ -1,12 +1,12 @@
-package sinon.botcheckattack;
+package sinon.nullcordxdiscordbridge;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-import sinon.botcheckattack.command.Commands;
-import sinon.botcheckattack.task.CPSChecker;
+import sinon.nullcordxdiscordbridge.command.Commands;
+import sinon.nullcordxdiscordbridge.task.CPSChecker;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,10 +23,10 @@ import com.xism4.nullcordx.NullCordX;
 import com.xism4.nullcordx.statistics.StatisticsManager;
 
 @SuppressWarnings("deprecation")
-public final class BotAlert extends Plugin {
+public final class NullCordXDiscordBridge extends Plugin {
 
     public CPSChecker cpsCheckerTask;
-    private static BotAlert instance;
+    private static NullCordXDiscordBridge instance;
     private Configuration config;
 
     NullCordX nullCordX;
@@ -34,7 +34,7 @@ public final class BotAlert extends Plugin {
 
     DiscordWebhook webhook;
 
-    public static BotAlert getInstance() {
+    public static NullCordXDiscordBridge getInstance() {
         return instance;
     }
 
@@ -47,7 +47,7 @@ public final class BotAlert extends Plugin {
         instance = this;
         saveDefaultConfig();
         reloadConfig();
-        getProxy().getPluginManager().registerCommand(this, new Commands("botalert", "botalert.admin"));
+        getProxy().getPluginManager().registerCommand(this, new Commands("ncdb", "ncdb.admin", "botalert"));
 
         this.nullCordX = BungeeCord.getInstance().getNullCordX();
         this.statisticsManager = nullCordX.getStatisticsManager();
@@ -55,14 +55,22 @@ public final class BotAlert extends Plugin {
         this.webhook = new DiscordWebhook(config.getString("webhook.url"));
         this.webhook.setUsername(config.getString("webhook.username"));
         this.webhook.setAvatarUrl(config.getString("webhook.avatar"));
-        sendInitWebhook();
+        sendPingWebhook(true);
+    }
+
+    @Override
+    public void onDisable() {
+        if (!this.cpsCheckerTask.isCancel()) {
+            this.cpsCheckerTask.cancel();
+        }
+        sendPingWebhook(false);
     }
 
     public void reloadConfig() {
         try {
             config = ConfigurationProvider.getProvider(YamlConfiguration.class)
                     .load(new File(getDataFolder(), "config.yml"));
-            getLogger().log(Level.INFO, "Đã tải lại config!");
+            getLogger().log(Level.INFO, "Đã load config!");
         } catch (IOException e) {
             getLogger().log(Level.WARNING, "Có lỗi xảy ra khi tải lại config!");
         }
@@ -85,7 +93,7 @@ public final class BotAlert extends Plugin {
 
     }
 
-    public void sendWebhook(int cps) {
+    public void sendLogWebhook(int cps) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         DecimalFormat formatter = new DecimalFormat("#0.00");
@@ -119,13 +127,17 @@ public final class BotAlert extends Plugin {
         }
     }
 
-    public void sendInitWebhook() {
+    public void sendPingWebhook(boolean isProxyEnabled) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        webhook.setContent("[" + dtf.format(now) + "]: " + "Webhook connected!");
+        if (isProxyEnabled) {
+            webhook.setContent("[" + dtf.format(now) + "]: " + "Proxy instance or plugin enabled, webhook connected!");
+            getLogger().log(Level.INFO, "Webhook connected!");
+        } else {
+            webhook.setContent("[" + dtf.format(now) + "]: " + "Proxy instance or plugin disabled, webhook disconnected!");
+        }
         try {
             webhook.execute();
-            getLogger().log(Level.INFO, "Webhook connected!");
         } catch (IOException e) {
             e.printStackTrace();
         }

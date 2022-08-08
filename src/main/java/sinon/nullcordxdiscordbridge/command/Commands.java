@@ -1,8 +1,8 @@
-package sinon.botcheckattack.command;
+package sinon.nullcordxdiscordbridge.command;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
-import sinon.botcheckattack.BotAlert;
+import sinon.nullcordxdiscordbridge.NullCordXDiscordBridge;
 
 @SuppressWarnings("deprecation")
 public class Commands extends Command {
@@ -11,20 +11,21 @@ public class Commands extends Command {
         super(name, permission, aliases);
     }
 
-    private BotAlert main = BotAlert.getInstance();
+    private NullCordXDiscordBridge main = NullCordXDiscordBridge.getInstance();
 
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("reload")) {
                 main.reloadConfig();
+                main.sendPingWebhook(true);
             }
 
-            if (args[0].equalsIgnoreCase("testwebhook")) {
-                main.sendInitWebhook();
+            if (args[0].equalsIgnoreCase("pingwebhook")) {
+                main.sendPingWebhook(true);
             }
         } else {
-            sender.sendMessage("/botalert <reload> | <testwebhook>");
+            sender.sendMessage("/ncdb <reload> | <pingwebhook>");
         }
     }
 }

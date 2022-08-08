@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>sinon</groupId>
-    <artifactId>BotAlert</artifactId>
+    <artifactId>nullcordxdiscordbridge</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>BotAlert</name>
+    <name>NullCordX-DiscordBridge</name>
 
     <properties>
         <java.version>11</java.version>
@@ -15,6 +15,7 @@
     </properties>
 
     <build>
+        <finalName>${project.name}</finalName>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
             <plugin>

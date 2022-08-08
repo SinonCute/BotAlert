@@ -1,15 +1,15 @@
-package sinon.botcheckattack.task;
+package sinon.nullcordxdiscordbridge.task;
 
 import com.xism4.nullcordx.statistics.StatisticsManager;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import net.md_5.bungee.config.Configuration;
-import sinon.botcheckattack.BotAlert;
+import sinon.nullcordxdiscordbridge.NullCordXDiscordBridge;
 
 import java.util.concurrent.TimeUnit;
 
 public class CPSChecker implements Runnable {
 
-    private BotAlert main;
+    private NullCordXDiscordBridge main;
     private StatisticsManager statisticsManager;
 
     private ScheduledTask task;
@@ -17,7 +17,7 @@ public class CPSChecker implements Runnable {
 
     private Configuration config;
 
-    public CPSChecker(BotAlert main, StatisticsManager statisticsManager) {
+    public CPSChecker(NullCordXDiscordBridge main, StatisticsManager statisticsManager) {
         this.main = main;
         this.statisticsManager = statisticsManager;
         this.config = main.getConfig();
@@ -27,18 +27,8 @@ public class CPSChecker implements Runnable {
 
     @Override
     public void run() {
-        /*
-         * if (nullcordx.isUnderAttack()) {
-         * if (!nullcordx.isForceProtectionEnabled()) {
-         * int currentCPS = statisticsManager.getConnectionsPerSecond();
-         * // int blockedCPS = statisticsManager.getBlockedConnectionsPerSecond();
-         * main.sendWebhook(currentCPS);
-         * }
-         * }
-         */
-
         int currentCPS = statisticsManager.getConnectionsPerSecond();
-        main.sendWebhook(currentCPS);
+        main.sendLogWebhook(currentCPS);
     }
 
     public void cancel() {
