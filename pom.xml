@@ -65,5 +65,12 @@
             <version>1.19-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.xism4</groupId>
+            <artifactId>nullcordx</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/NullCordX.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

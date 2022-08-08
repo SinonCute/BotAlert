@@ -11,7 +11,7 @@ public class Commands extends Command {
         super(name, permission, aliases);
     }
 
-    private final BotAlert main = BotAlert.getInstance();
+    private BotAlert main = BotAlert.getInstance();
 
     @Override
     public void execute(CommandSender sender, String[] args) {
@@ -19,8 +19,12 @@ public class Commands extends Command {
             if (args[0].equalsIgnoreCase("reload")) {
                 main.reloadConfig();
             }
+
+            if (args[0].equalsIgnoreCase("testwebhook")) {
+                main.sendInitWebhook();
+            }
         } else {
-            sender.sendMessage("/botalert <reload>");
+            sender.sendMessage("/botalert <reload> | <testwebhook>");
         }
     }
 }

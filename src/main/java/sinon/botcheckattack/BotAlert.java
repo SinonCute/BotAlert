@@ -1,6 +1,6 @@
 package sinon.botcheckattack;
 
-import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -11,20 +11,35 @@ import sinon.botcheckattack.task.CPSChecker;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
+import com.sun.management.OperatingSystemMXBean;
 
+import com.xism4.nullcordx.NullCordX;
+import com.xism4.nullcordx.statistics.StatisticsManager;
+
+@SuppressWarnings("deprecation")
 public final class BotAlert extends Plugin {
 
+    public CPSChecker cpsCheckerTask;
     private static BotAlert instance;
     private Configuration config;
 
-    public CPSChecker task;
+    NullCordX nullCordX;
+    StatisticsManager statisticsManager;
+
+    DiscordWebhook webhook;
 
     public static BotAlert getInstance() {
         return instance;
+    }
+
+    public Configuration getConfig() {
+        return config;
     }
 
     @Override
@@ -33,11 +48,14 @@ public final class BotAlert extends Plugin {
         saveDefaultConfig();
         reloadConfig();
         getProxy().getPluginManager().registerCommand(this, new Commands("botalert", "botalert.admin"));
-        task = new CPSChecker();
-    }
 
-    public Configuration getConfig() {
-        return config;
+        this.nullCordX = BungeeCord.getInstance().getNullCordX();
+        this.statisticsManager = nullCordX.getStatisticsManager();
+        this.cpsCheckerTask = new CPSChecker(this, statisticsManager);
+        this.webhook = new DiscordWebhook(config.getString("webhook.url"));
+        this.webhook.setUsername(config.getString("webhook.username"));
+        this.webhook.setAvatarUrl(config.getString("webhook.avatar"));
+        sendInitWebhook();
     }
 
     public void reloadConfig() {
@@ -51,8 +69,9 @@ public final class BotAlert extends Plugin {
     }
 
     public void saveDefaultConfig() {
-        if (!getDataFolder().exists())
+        if (!getDataFolder().exists()) {
             getDataFolder().mkdir();
+        }
 
         File file = new File(getDataFolder(), "config.yml");
 
@@ -66,26 +85,49 @@ public final class BotAlert extends Plugin {
 
     }
 
-    public void sendWebhook(int cps, int blocked) {
+    public void sendWebhook(int cps) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
+        DecimalFormat formatter = new DecimalFormat("#0.00");
 
-        DiscordWebhook webhook = new DiscordWebhook(config.getString("webhook.url"));
+        // Resources stats
+        long maxMem = Runtime.getRuntime().maxMemory() / 1024L / 1024L;
+        long totalMem = Runtime.getRuntime().totalMemory() / 1024L / 1024L;
+        long freeMem = Runtime.getRuntime().freeMemory() / 1024L / 1024L;
+        long usedMem = maxMem - freeMem;
 
-        webhook.setUsername(config.getString("webhook.username"));
-        webhook.setAvatarUrl(config.getString("webhook.avatar"));
+        OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(
+                OperatingSystemMXBean.class);
+        String processCPULoad = formatter.format(osBean.getProcessCpuLoad() * 100.0D);
+        String systemCPULoad = formatter.format(osBean.getSystemCpuLoad() * 100.0D);
+
         webhook.setContent(config.getString("webhook.content")
+                .replace("{time}", dtf.format(now))
+                .replace("{status}", nullCordX.isUnderAttack() ? "true" : "false")
                 .replace("{cps}", String.valueOf(cps))
-                .replace("{time}", dtf.format(now)));
+                .replace("{maxMem}", String.valueOf(maxMem))
+                .replace("{totalMem}", String.valueOf(totalMem))
+                .replace("{freeMem}", String.valueOf(freeMem))
+                .replace("{usedMem}", String.valueOf(usedMem))
+                .replace("{processCPULoad}", String.valueOf(processCPULoad))
+                .replace("{systemCPULoad}", String.valueOf(systemCPULoad)));
+
         try {
             webhook.execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    public String color(String s) {
-        return ChatColor.translateAlternateColorCodes('&', s);
+    public void sendInitWebhook() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        webhook.setContent("[" + dtf.format(now) + "]: " + "Webhook connected!");
+        try {
+            webhook.execute();
+            getLogger().log(Level.INFO, "Webhook connected!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
