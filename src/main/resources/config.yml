@@ -1,8 +1,17 @@
 # Placeholder:
+# {time}: Thời gian hiện tại
+# {status}: Trạng thái, true nếu đang bị attack, false nếu đang bình thường
 # {cps}: CPS đang đánh vào server
+# {totalMem}/{freeMem}/{usedMem}: Các thông tin về memory của runtime
+# {processCPULoad}/{systemCPULoad}: Các thông tin về cpu load của runtime và system
+# Thời gian giữa các lần check tính bằng giây, đặt từ 10-15 giây để tránh bị rate limit từ Discord
+#
+# Made with love by Sinon
 
 webhook:
   url: ""
   username: "NullCordX Stats"
   avatar: "https://cdn.discordapp.com/avatars/541245686478536726/47c730c2798cc7722cf29c2086706290.png"
-  content: "[{time}] Attack detected (true) - CPS/Blocked: **{cps}**"
+  content: "[{time}]: Attack (**{status}**) - CPS: **{cps}** `(Total/Free/Used/Process/System: {totalMem}MB/{freeMem}MB/{usedMem}MB/{processCPULoad}%/{systemCPULoad}%)`"
+checker:
+  interval: 15

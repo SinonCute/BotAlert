@@ -1,4 +1,4 @@
-name: BotAlert
+name: NullCordX-DiscordBridge
 version: '${project.version}'
-main: sinon.botcheckattack.BotAlert
+main: sinon.nullcordxdiscordbridge.NullCordXDiscordBridge
 author: Sinon
