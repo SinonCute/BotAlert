@@ -21,11 +21,11 @@ public class Commands extends Command {
                 main.sendPingWebhook(true);
             }
 
-            if (args[0].equalsIgnoreCase("pingwebhook")) {
+            if (args[0].equalsIgnoreCase("pingwebhook") || args[0].equalsIgnoreCase("ping")) {
                 main.sendPingWebhook(true);
             }
         } else {
-            sender.sendMessage("/ncdb <reload> | <pingwebhook>");
+            sender.sendMessage("/ncdb <reload> | <ping>");
         }
     }
 }
