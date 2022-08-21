@@ -5,6 +5,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
+import net.shieldcommunity.nullcordx.NullCordX;
+import net.shieldcommunity.nullcordx.statistics.StatisticsManager;
 import sinon.nullcordxdiscordbridge.command.Commands;
 import sinon.nullcordxdiscordbridge.task.CPSChecker;
 
@@ -19,9 +21,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import com.sun.management.OperatingSystemMXBean;
 
-import com.xism4.nullcordx.NullCordX;
-import com.xism4.nullcordx.statistics.StatisticsManager;
-
 @SuppressWarnings("deprecation")
 public final class NullCordXDiscordBridge extends Plugin {
 
@@ -31,7 +30,6 @@ public final class NullCordXDiscordBridge extends Plugin {
 
     NullCordX nullCordX;
     StatisticsManager statisticsManager;
-
     DiscordWebhook webhook;
 
     public static NullCordXDiscordBridge getInstance() {
@@ -134,7 +132,8 @@ public final class NullCordXDiscordBridge extends Plugin {
             webhook.setContent("[" + dtf.format(now) + "]: " + "Proxy instance or plugin enabled, webhook connected!");
             getLogger().log(Level.INFO, "Webhook connected!");
         } else {
-            webhook.setContent("[" + dtf.format(now) + "]: " + "Proxy instance or plugin disabled, webhook disconnected!");
+            webhook.setContent(
+                    "[" + dtf.format(now) + "]: " + "Proxy instance or plugin disabled, webhook disconnected!");
         }
         try {
             webhook.execute();

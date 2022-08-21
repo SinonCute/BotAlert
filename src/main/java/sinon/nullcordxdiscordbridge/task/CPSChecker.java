@@ -1,8 +1,8 @@
 package sinon.nullcordxdiscordbridge.task;
 
-import com.xism4.nullcordx.statistics.StatisticsManager;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import net.md_5.bungee.config.Configuration;
+import net.shieldcommunity.nullcordx.statistics.StatisticsManager;
 import sinon.nullcordxdiscordbridge.NullCordXDiscordBridge;
 
 import java.util.concurrent.TimeUnit;
